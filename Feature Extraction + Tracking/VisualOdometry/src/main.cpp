@@ -28,10 +28,7 @@ int main(int argc,char* argv[])
         std::cout<<"Use the latter for loading images from a camera"<<std::endl;
         return -1;
     }
-
-
-
-
     return 0;
 }
+
 

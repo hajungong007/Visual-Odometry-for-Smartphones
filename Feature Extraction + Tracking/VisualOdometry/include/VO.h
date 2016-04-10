@@ -41,11 +41,8 @@ namespace VO{
             //! Function to track features in consecutive images
             bool trackFeatures(cv::Mat prevImg,cv::Mat currentImg,std::vector<cv::Point2f>& points1, std::vector<cv::Point2f>& points2, std::vector<uchar>& status);
 
-            //! Function to compute trajectory
-            bool buildTrajectory();
-
             //! Plot Trajectory
-            bool plotTrajectory();
+            bool plotTrajectory(cv::Mat trajectory,cv::Mat translation, cv::Mat rotation);
 
         private:
 
@@ -53,80 +50,80 @@ namespace VO{
             cv::Mat m_intrinsicMatrix;
     };
 
-    class RobustMatcher{
-        private:
-            // pointer to the feature point detector object
-            cv::Ptr<cv::FeatureDetector> detector;
+//    class RobustMatcher{
+//        private:
+//            // pointer to the feature point detector object
+//            cv::Ptr<cv::FeatureDetector> detector;
 
-            // pointer to the feature descriptor extractor object
-            cv::Ptr<cv::DescriptorExtractor> extractor;
+//            // pointer to the feature descriptor extractor object
+//            cv::Ptr<cv::DescriptorExtractor> extractor;
 
-            // pointer to the matcher object
-            cv::Ptr<cv::DescriptorMatcher> matcher;
+//            // pointer to the matcher object
+//            cv::Ptr<cv::DescriptorMatcher> matcher;
 
-            float ratio; // max ratio between 1st and 2nd NN
-            bool refineF; // if true, will refine the F matrix
-            double distance; // min distance to epipolar
-            double confidence; // confidence level ( probability )
+//            float ratio; // max ratio between 1st and 2nd NN
+//            bool refineF; // if true, will refine the F matrix
+//            double distance; // min distance to epipolar
+//            double confidence; // confidence level ( probability )
 
-        public:
-            RobustMatcher() : ratio(0.65f), refineF(true), confidence(0.99), distance(3.0){
-                detector = new cv::OrbFeatureDetector();
-                extractor = new cv::OrbDescriptorExtractor();
-                matcher = new cv::BFMatcher();
-            }
+//        public:
+//            RobustMatcher() : ratio(0.65f), refineF(true), confidence(0.99), distance(3.0){
+//                detector = new cv::OrbFeatureDetector();
+//                extractor = new cv::OrbDescriptorExtractor();
+//                matcher = new cv::BFMatcher();
+//            }
 
-            // Set the feature detector
-            void setFeatureDetector(cv::Ptr<cv::FeatureDetector>& detect){
-                detector=detect;
-            }
+//            // Set the feature detector
+//            void setFeatureDetector(cv::Ptr<cv::FeatureDetector>& detect){
+//                detector=detect;
+//            }
 
-            // Set the descriptor extractor
-            void setDescriptorExtractor(cv::Ptr<cv::DescriptorExtractor>& desc){
-                extractor = desc;
-            }
+//            // Set the descriptor extractor
+//            void setDescriptorExtractor(cv::Ptr<cv::DescriptorExtractor>& desc){
+//                extractor = desc;
+//            }
 
-            // Set the matcher
-            void setDescriptorMatcher(cv::Ptr<cv::DescriptorMatcher>& match){
-                matcher = match;
-            }
+//            // Set the matcher
+//            void setDescriptorMatcher(cv::Ptr<cv::DescriptorMatcher>& match){
+//                matcher = match;
+//            }
 
-            // Set confidence level
-            void setConfidenceLevel(double conf) {
-               confidence = conf;
-            }
+//            // Set confidence level
+//            void setConfidenceLevel(double conf) {
+//               confidence = conf;
+//            }
 
-            //Set MinDistanceToEpipolar
-            void setMinDistanceToEpipolar(double dist) {
-               distance = dist;
-            }
+//            //Set MinDistanceToEpipolar
+//            void setMinDistanceToEpipolar(double dist) {
+//               distance = dist;
+//            }
 
-            //Set ratio
-            void setRatio(float rat) {
-               ratio = rat;
-            }
+//            //Set ratio
+//            void setRatio(float rat) {
+//               ratio = rat;
+//            }
 
-            // Clear matches for which NN ratio is > than threshold
-            // return the number of removed points
-            // (corresponding entries being cleared,
-            // i.e. size will be 0)
-            int ratioTest(std::vector<std::vector<cv::DMatch> >& matches);
+//            // Clear matches for which NN ratio is > than threshold
+//            // return the number of removed points
+//            // (corresponding entries being cleared,
+//            // i.e. size will be 0)
+//            int ratioTest(std::vector<std::vector<cv::DMatch> >& matches);
 
-            // Insert symmetrical matches in symMatches vector
-            void symmetryTest(const std::vector<std::vector<cv::DMatch> >& matches1,const std::vector<std::vector<cv::DMatch> >& matches2,std::vector<cv::DMatch>& symMatches);
+//            // Insert symmetrical matches in symMatches vector
+//            void symmetryTest(const std::vector<std::vector<cv::DMatch> >& matches1,const std::vector<std::vector<cv::DMatch> >& matches2,std::vector<cv::DMatch>& symMatches);
 
-            // Identify good matches using RANSAC
-            // Return fundemental matrix
-            cv::Mat ransacTest(const std::vector<cv::DMatch>& matches,const std::vector<cv::KeyPoint>& keypoints1,const std::vector<cv::KeyPoint>& keypoints2,std::vector<cv::DMatch>& outMatches);
+//            // Identify good matches using RANSAC
+//            // Return fundemental matrix
+//            cv::Mat ransacTest(const std::vector<cv::DMatch>& matches,const std::vector<cv::KeyPoint>& keypoints1,const std::vector<cv::KeyPoint>& keypoints2,std::vector<cv::DMatch>& outMatches);
 
-            // Match feature points using symmetry test and RANSAC
-            // returns fundamental matrix
-            cv::Mat match(cv::Mat& image1,cv::Mat& image2, // input images
-               std::vector<cv::DMatch>& matches,std::vector<cv::KeyPoint>& keypoints1,std::vector<cv::KeyPoint>& keypoints2); // output matches and keypoints
+//            // Match feature points using symmetry test and RANSAC
+//            // returns fundamental matrix
+//            cv::Mat match(cv::Mat& image1,cv::Mat& image2, // input images
+//               std::vector<cv::DMatch>& matches,std::vector<cv::KeyPoint>& keypoints1,std::vector<cv::KeyPoint>& keypoints2); // output matches and keypoints
 
-    };
+//    };
+//}
 }
-
 cv::Mat readCameraIntrinsic(std::string pathToIntrinsic);
 
 #endif
